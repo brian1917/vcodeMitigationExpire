@@ -1,0 +1,4 @@
+*.log
+*.json
+!sampleCongif.json
+.idea/
