@@ -1,4 +1,6 @@
 *.log
 *.json
+*.txt
 !sampleCongif.json
 .idea/
+backlog.txt

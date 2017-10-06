@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"flag"
 )
 
 type config struct {
@@ -23,7 +24,7 @@ type config struct {
 
 	CommentText struct {
 		RequireCommentText bool   `json:"requireCommentText"`
-		CommentText        string `json:"commentText"`
+		Text        string `json:"commentText"`
 	} `json:"commentText"`
 
 	AppScope struct {
@@ -40,12 +41,20 @@ type config struct {
 	} `json:"expirationDetails"`
 }
 
-func getConfig() config {
+var configFile string
+
+func init() {
+		flag.StringVar(&configFile, "config", "", "Veracode username")
+}
+
+func parseConfig() config {
+
+	flag.Parse()
 
 	//READ CONFIG FILE
 	var config config
 
-	data, err := ioutil.ReadFile("config.json")
+	data, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		log.Fatal(err)
 	}
