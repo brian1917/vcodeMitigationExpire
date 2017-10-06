@@ -1,0 +1,31 @@
+{
+  "auth": {
+    "user": "apiUserName",
+    "password": "Pwd123"
+  },
+  "targetMitigations": {
+    "potentialFalsePositive": false,
+    "mitigatedByDesign": false,
+    "mitigationByOSEnv": false,
+    "mitigatedByNetworkEnv": false,
+    "reviewedNoActionTaken" : true,
+    "remediatedByUser": false
+  },
+  "commentText": {
+    "requireCommentText": true,
+    "commentText": "INCLUDE IN EXPIRATION UTILITY"
+  },
+  "appScope": {
+    "limitAppList": false,
+    "appListTextFile": ""
+  },
+  "expirationDetails": {
+    "DateFlawFound": false,
+    "dateOfMitigationApproval": true,
+    "specificDate": false,
+    "date":"",
+    "DaysToExpire": 180
+  }
+
+}
+
