@@ -12,7 +12,8 @@ github.com/brian1917/vcodeapi
 
 ## Configuration File
 A sample config file (`sampleConfig.json`) is included in the repository. An annotated version is below:
-```{
+```
+{
      "auth": {
        "user": "apiUserName",
        "password": "Pwd123"
