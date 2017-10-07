@@ -1,13 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"github.com/brian1917/vcodeapi"
 	"log"
 	"os"
-	"bufio"
 )
 
-func getApps(user, password string, limit bool, txtfile string) []string{
+func getApps(user, password string, limit bool, txtfile string) []string {
 	var apps []string
 
 	if limit == false {
@@ -18,7 +18,7 @@ func getApps(user, password string, limit bool, txtfile string) []string{
 		for _, app := range appList {
 			apps = append(apps, app.AppID)
 		}
-	} else{
+	} else {
 		file, err := os.Open(txtfile)
 		if err != nil {
 			log.Fatal(err)
@@ -30,9 +30,9 @@ func getApps(user, password string, limit bool, txtfile string) []string{
 			apps = append(apps, scanner.Text())
 		}
 
-		//if err := scanner.Err(); err != nil {
-		//	log.Fatal(err)
-		//}
+		if err := scanner.Err(); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	return apps

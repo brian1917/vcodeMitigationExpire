@@ -13,7 +13,7 @@
   },
   "commentText": {
     "requireCommentText": true,
-    "commentText": "INCLUDE IN EXPIRATION UTILITY"
+    "text": "INCLUDE IN EXPIRATION UTILITY"
   },
   "appScope": {
     "limitAppList": false,
@@ -24,7 +24,7 @@
     "dateOfMitigationApproval": true,
     "specificDate": false,
     "date":"",
-    "DaysToExpire": 180
+    "DaysToExpire": 90
   }
 
 }

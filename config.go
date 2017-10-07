@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"io/ioutil"
 	"log"
-	"flag"
 )
 
 type config struct {
@@ -24,7 +24,7 @@ type config struct {
 
 	CommentText struct {
 		RequireCommentText bool   `json:"requireCommentText"`
-		Text        string `json:"commentText"`
+		Text               string `json:"text"`
 	} `json:"commentText"`
 
 	AppScope struct {
@@ -44,7 +44,7 @@ type config struct {
 var configFile string
 
 func init() {
-		flag.StringVar(&configFile, "config", "", "Veracode username")
+	flag.StringVar(&configFile, "config", "", "Veracode username")
 }
 
 func parseConfig() config {
@@ -85,7 +85,7 @@ func parseConfig() config {
 	if config.ExpirationDetails.SpecificDate == true {
 		counter += 1
 	}
-	if counter == 0{
+	if counter == 0 {
 		log.Fatal("One expiration trigger needs to be set to true")
 	}
 	if counter > 1 {

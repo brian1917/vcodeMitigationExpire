@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/brian1917/vcodeapi"
 	"log"
 	"time"
-	"github.com/brian1917/vcodeapi"
 )
 
 func expireCheck(flaw vcodeapi.Flaw, config config) bool {
@@ -13,24 +13,24 @@ func expireCheck(flaw vcodeapi.Flaw, config config) bool {
 	var refDate time.Time
 	var err error
 
-	if config.ExpirationDetails.SpecificDate == true{
+	if config.ExpirationDetails.SpecificDate == true {
 		expDate, err = time.Parse("2006-01-02", config.ExpirationDetails.Date)
 	} else if config.ExpirationDetails.DateFlawFound == true {
 		refDate, err = time.Parse("2006-01-02 15:04:05 MST", flaw.Date_first_occurrence)
 		if err != nil {
 			log.Fatal(err)
 		}
-		expDate = refDate.AddDate(0,0,config.ExpirationDetails.DaysToExpire)
+		expDate = refDate.AddDate(0, 0, config.ExpirationDetails.DaysToExpire)
 	} else {
 		refDate, err = time.Parse("2006-01-02 15:04:05 MST", flaw.Mitigations.Mitigation[len(flaw.Mitigations.Mitigation)-2].Date)
 		if err != nil {
 			log.Fatal(err)
 		}
-		expDate = refDate.AddDate(0,0,config.ExpirationDetails.DaysToExpire)
+		expDate = refDate.AddDate(0, 0, config.ExpirationDetails.DaysToExpire)
 	}
 
 	diff := int64(expDate.Sub(time.Now()))
-	if diff >= 0 {
+	if diff <= 0 {
 		expCheck = true
 	} else {
 		expCheck = false
