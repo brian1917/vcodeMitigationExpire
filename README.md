@@ -1,8 +1,8 @@
 # Veracode Mitigation Expiring Utility
 
 ## Description
-Designed to run a a scheduled frequency to automatically expire mitigations. The types of mitigations, expiration
-references, and other settings are controlled in a json config file.
+Designed to run on a scheduled frequency to expire mitigations. The types of mitigations, expiration
+references, and other settings are controlled in a JSON config file.
 
 ## Third-party Packages
 github.com/brian1917/vcodeapi
