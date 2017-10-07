@@ -11,26 +11,26 @@ references, and other settings are controlled in a json config file.
 1.  **-config**: path to json config file
 
 ## Configuration File
-A sample config file (`sampleConfig.json`) is included in the repository. The configuration is explained with comments below.
+A sample config file (`sampleConfig.json`) is included in the repository. An annotated version is below:
 ```{
      "auth": {
        "user": "apiUserName",
        "password": "Pwd123"
      },
-     "targetMitigations": {                     // Mitigation types set to true will be included for expiring (rejecting)
-       "potentialFalsePositive": false,
+     "targetMitigations": {                     // Mitigation types set to true will
+       "potentialFalsePositive": false,         // be included for expiring (rejecting)
        "mitigatedByDesign": false,
        "mitigationByOSEnv": false,
        "mitigatedByNetworkEnv": false,
        "reviewedNoActionTaken" : true,
        "remediatedByUser": false
      },
-     "commentText": {
-       "requireCommentText": true,              // If set to true, only mitigations with the text in the approval comments will be expired (rejected)
+     "commentText": {                           // If set to true, only mitigations with the text
+       "requireCommentText": true,              // in the approval comments will be expired (rejected)
        "text": "INCLUDE IN EXPIRATION UTILITY"
      },
-     "appScope": {                              // If set to false, all apps in account are used. If set to true, specify a text file with app IDs on each line
-       "limitAppList": false,
+     "appScope": {                              // If set to false, all apps in account are used.
+       "limitAppList": false,                   // If set to true, specify a text file with app IDs on each line
        "appListTextFile": ""
      },
      "expirationDetails": {
@@ -43,6 +43,8 @@ A sample config file (`sampleConfig.json`) is included in the repository. The co
 
    }
  ```
+* At least one `targetMitigation` must be set to `true`
+* One (and only one) of `dateFlawFound`, `dateOfMitigationApproval`, `specificDate` must be set to true.
 
 ## Executables
 I've added the executables for Mac (vcodeMitigationExpire) and Windows (vcodeMitigationExpire.exe).

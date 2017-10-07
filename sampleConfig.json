@@ -24,7 +24,7 @@
     "dateOfMitigationApproval": true,
     "specificDate": false,
     "date":"",
-    "DaysToExpire": 90
+    "daysToExpire": 90
   }
 
 }

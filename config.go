@@ -37,7 +37,7 @@ type config struct {
 		DateOfMitigationApproval bool   `json:"dateOfMitigationApproval"`
 		SpecificDate             bool   `json:"specificDate"`
 		Date                     string `json:"date"`
-		DaysToExpire             int    `json:"DaysToExpire"`
+		DaysToExpire             int    `json:"daysToExpire"`
 	} `json:"expirationDetails"`
 }
 
