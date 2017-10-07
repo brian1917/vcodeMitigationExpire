@@ -49,5 +49,5 @@ A sample config file (`sampleConfig.json`) is included in the repository. An ann
 ## Executables
 I've added the executables for Mac (vcodeMitigationExpire) and Windows (vcodeMitigationExpire.exe).
 Building from source is preferred, but I'll try to keep these up-to-date for those that don't have Go installed.
-* For Windows, download the EXE and from the command line run `vcodeMitigationExpire.exe -config config.json`
+* For Windows, download the executable and from the command line run `vcodeMitigationExpire.exe -config config.json`
 * For Mac, download the executable, set it to be an executable: `chmod +x vcodeMitigationExpire` and then run `./vcodeMitigationExpire -config config.json`
