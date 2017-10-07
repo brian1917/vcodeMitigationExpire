@@ -5,10 +5,10 @@ Designed to run a a scheduled frequency to automatically expire mitigations. The
 references, and other settings are controlled in a json config file.
 
 ## Third-party Packages
-1. github.com/brian1917/vcodeapi
+github.com/brian1917/vcodeapi
 
 ## Parameters
-1.  **-config**: path to json config file
+`-config`: path to json config file
 
 ## Configuration File
 A sample config file (`sampleConfig.json`) is included in the repository. An annotated version is below:
@@ -49,5 +49,5 @@ A sample config file (`sampleConfig.json`) is included in the repository. An ann
 ## Executables
 I've added the executables for Mac (vcodeMitigationExpire) and Windows (vcodeMitigationExpire.exe).
 Building from source is preferred, but I'll try to keep these up-to-date for those that don't have Go installed.
-* For Windows, users download the EXE and from the command line run *_vcodeMitigationExpire.exe -config config.json_*
-* For Mac, download the executable, set it to be an executable: *_chmod +x vcodeMitigationExpire_* and then run *_./vcodeMitigationExpire -config config.json_*
+* For Windows, users download the EXE and from the command line run `vcodeMitigationExpire.exe -config config.json`
+* For Mac, download the executable, set it to be an executable: `chmod +x vcodeMitigationExpire` and then run `./vcodeMitigationExpire -config config.json`
