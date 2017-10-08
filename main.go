@@ -26,8 +26,14 @@ func main() {
 	var errorCheck error
 	var flawList []string
 
-	// PARSE CONFIG FILE
+	// PARSE CONFIG FILE AND LOG CONFIG SETTINGS
 	config := parseConfig()
+	log.Printf("Config Settings:\n" +
+		"[*] Target Mitigations:%v\n" +
+		"[*] Comment Text:%v\n" +
+		"[*] App Scope:%v\n" +
+		"[*] Expiration Details:%v\n",
+		config.TargetMitigations, config.CommentText, config.AppScope, config.ExpirationDetails)
 
 	// GET APP LIST
 	appList := getApps(config.Auth.User, config.Auth.Password, config.AppScope.LimitAppList, config.AppScope.AppListTextFile)
@@ -98,8 +104,11 @@ func main() {
 			}
 			// IF WE HAVE FLAWS MEETING CRITERIA, RUN UPDATE MITIGATION API
 			if len(flawList) > 0 {
-				vcodeapi.ParseUpdateMitigation(config.Auth.User, config.Auth.Password, recentBuild,
-					"reject", "Expired", strings.Join(flawList, ","))
+				expireError := vcodeapi.ParseUpdateMitigation(config.Auth.User, config.Auth.Password, recentBuild,
+					"rejected", "Mitigation expired automatically", strings.Join(flawList, ","))
+				if expireError != nil{
+					log.Fatal(expireError)
+				}
 				log.Printf("App ID %v: Reject Flaw IDs %v\n", appID, strings.Join(flawList, ","))
 			}
 		}

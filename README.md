@@ -1,7 +1,7 @@
 # Veracode Mitigation Expiring Utility
 
 ## Description
-Designed to run on a scheduled frequency to expire mitigations. The types of mitigations, expiration
+Utility is designed to be run as on a regular cadence (e.g., weekly cron job) to expire mitigations. The types of mitigations, expiration
 references, and other settings are controlled in a JSON config file.
 
 ## Third-party Packages
@@ -9,6 +9,11 @@ github.com/brian1917/vcodeapi
 
 ## Parameters
 `-config`: path to json config file
+
+## Logging
+The first run will create `vcodeMitigationExpire.log` and all subsequent runs will append to that file.
+Logging captures when the utility starts running, config settings (excluding auth), mitigations that were expired, 
+and when the utility stops running.
 
 ## Configuration File
 A sample config file (`sampleConfig.json`) is included in the repository. An annotated version is below:
