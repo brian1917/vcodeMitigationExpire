@@ -1,6 +1,7 @@
 *.log
 *.json
 *.txt
+.DS_Store
 .idea/
 backlog.txt
 !sampleConfig.json
