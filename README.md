@@ -6,7 +6,7 @@ The types of mitigations, expiration references, and other settings are controll
 for Windows and Mac are available for users that don't want to build from source.
 
 ## Third-party Packages
-github.com/brian1917/vcodeapi
+github.com/brian1917/vcodeapi (https://godoc.org/github.com/brian1917/vcodeapi)
 
 ## Parameters
 `-config`: path to JSON config file
