@@ -52,6 +52,11 @@ A sample config file (`sampleConfig.json`) is included in the repository. An ann
 * At least one `targetMitigation` must be set to `true`
 * One (and only one) of `dateFlawFound`, `dateOfMitigationApproval`, `specificDate` must be set to true.
 
+## Advanced Usage
+There might be cases where a single use-case isn't applicable for an organization (e.g.,some apps or
+flaws require different expiration times. In those cases, run multiple instances of the utility with different config files.
+For example, run the utility weekly (or daily) for each config file that is needed for each scenario.
+
 ## Executables
 I've added the executables for Mac (vcodeMitigationExpire) and Windows (vcodeMitigationExpire.exe).
 Building from source is preferred, but I'll try to keep these up-to-date for those that don't have Go installed.
