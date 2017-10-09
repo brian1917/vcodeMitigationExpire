@@ -9,7 +9,7 @@ for Windows and Mac are available for users that don't want to build from source
 github.com/brian1917/vcodeapi
 
 ## Parameters
-`-config`: path to json config file
+`-config`: path to JSON config file
 
 ## Logging
 The first run will create `vcodeMitigationExpire.log` and all subsequent runs will append to that file.
