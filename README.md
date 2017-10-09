@@ -1,8 +1,8 @@
 # Veracode Mitigation Expiring Utility
 
 ## Description
-Utility is designed to be run as on a regular cadence (e.g., weekly cron job) to expire mitigations. The types of mitigations, expiration
-references, and other settings are controlled in a JSON config file.
+Utility designed to be run as on a regular cadence (e.g., weekly cron job) to expire mitigations. 
+The types of mitigations, expiration references, and other settings are controlled in a JSON config file.
 
 ## Third-party Packages
 github.com/brian1917/vcodeapi
