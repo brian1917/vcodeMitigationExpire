@@ -2,7 +2,8 @@
 
 ## Description
 Utility designed to be run as on a regular cadence (e.g., weekly cron job) to expire mitigations. 
-The types of mitigations, expiration references, and other settings are controlled in a JSON config file.
+The types of mitigations, expiration references, and other settings are controlled in a JSON config file. Executables
+for Windows and Mac are available for users that don't want to build from source.
 
 ## Third-party Packages
 github.com/brian1917/vcodeapi
