@@ -46,6 +46,7 @@ A sample config file (`sampleConfig.json`) is included in the repository. An ann
        "specificDate": false,                   // Expiration Date = Date provided below in yyyy-mm-dd format
        "date":"",
        "DaysToExpire": 90
+       "rejectionComment": "Expired automatically by utility."      // Comment left by utility when rejecting expired mitigation
      }
 
    }
