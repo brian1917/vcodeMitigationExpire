@@ -80,7 +80,7 @@ func main() {
 		if appSkip == false {
 			for _, f := range flaws {
 				// ONLY RUN ON MITIGATED REMEDIATION STATUS (TAKES INTO ACCOUNT ACCEPTED AND NOT FIXED)
-				if f.Remediation_status == "Mitigated" {
+				if f.Remediation_status == "Mitigated" || f.Remediation_status == "Reviewed - No Action Taken" || f.Remediation_status == "Potential False Positive" || f.Remediation_status == "Remediated by User" {
 					//THE MOST RECENT MITIGATION ACTION IS THE ACCEPTANCE, PROPOSAL SHOULD BE SECOND LAST IN ARRAY
 					recentProposal := f.Mitigations.Mitigation[len(f.Mitigations.Mitigation)-2]
 					recentApproval := f.Mitigations.Mitigation[len(f.Mitigations.Mitigation)-1]
