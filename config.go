@@ -38,6 +38,7 @@ type config struct {
 		SpecificDate             bool   `json:"specificDate"`
 		Date                     string `json:"date"`
 		DaysToExpire             int    `json:"daysToExpire"`
+		RejectionComment         string `json:"rejectionComment"`
 	} `json:"expirationDetails"`
 }
 

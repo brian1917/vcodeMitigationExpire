@@ -105,7 +105,7 @@ func main() {
 			// IF WE HAVE FLAWS MEETING CRITERIA, RUN UPDATE MITIGATION API
 			if len(flawList) > 0 {
 				expireError := vcodeapi.ParseUpdateMitigation(config.Auth.User, config.Auth.Password, recentBuild,
-					"rejected", "Mitigation expired automatically", strings.Join(flawList, ","))
+					"rejected", config.ExpirationDetails.RejectionComment, strings.Join(flawList, ","))
 				if expireError != nil{
 					log.Fatal(expireError)
 				}
