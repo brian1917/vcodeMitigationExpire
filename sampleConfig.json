@@ -24,7 +24,7 @@
     "dateOfMitigationApproval": true,
     "specificDate": false,
     "date":"",
-    "daysToExpire": 90
+    "daysToExpire": 90,
     "rejectionComment": "Expired automatically by utility."
   }
 
