@@ -28,10 +28,10 @@ func main() {
 
 	// PARSE CONFIG FILE AND LOG CONFIG SETTINGS
 	config := parseConfig()
-	log.Printf("Config Settings:\n" +
-		"[*] Target Mitigations:%v\n" +
-		"[*] Comment Text:%v\n" +
-		"[*] App Scope:%v\n" +
+	log.Printf("Config Settings:\n"+
+		"[*] Target Mitigations:%v\n"+
+		"[*] Comment Text:%v\n"+
+		"[*] App Scope:%v\n"+
 		"[*] Expiration Details:%v\n",
 		config.TargetMitigations, config.CommentText, config.AppScope, config.ExpirationDetails)
 
@@ -80,7 +80,7 @@ func main() {
 		if appSkip == false {
 			for _, f := range flaws {
 				// ONLY RUN ON MITIGATED REMEDIATION STATUS (TAKES INTO ACCOUNT ACCEPTED AND NOT FIXED)
-				if f.Remediation_status == "Mitigated" || f.Remediation_status == "Reviewed - No Action Taken" || f.Remediation_status == "Potential False Positive" || f.Remediation_status == "Remediated by User" {
+				if f.RemediationStatus == "Mitigated" || f.RemediationStatus == "Reviewed - No Action Taken" || f.RemediationStatus == "Potential False Positive" || f.RemediationStatus == "Remediated by User" {
 					//THE MOST RECENT MITIGATION ACTION IS THE ACCEPTANCE, PROPOSAL SHOULD BE SECOND LAST IN ARRAY
 					recentProposal := f.Mitigations.Mitigation[len(f.Mitigations.Mitigation)-2]
 					recentApproval := f.Mitigations.Mitigation[len(f.Mitigations.Mitigation)-1]
@@ -106,7 +106,7 @@ func main() {
 			if len(flawList) > 0 {
 				expireError := vcodeapi.ParseUpdateMitigation(config.Auth.User, config.Auth.Password, recentBuild,
 					"rejected", config.ExpirationDetails.RejectionComment, strings.Join(flawList, ","))
-				if expireError != nil{
+				if expireError != nil {
 					log.Fatal(expireError)
 				}
 				log.Printf("App ID %v: Reject Flaw IDs %v\n", appID, strings.Join(flawList, ","))

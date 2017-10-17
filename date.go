@@ -16,7 +16,7 @@ func expireCheck(flaw vcodeapi.Flaw, config config) bool {
 	if config.ExpirationDetails.SpecificDate == true {
 		expDate, err = time.Parse("2006-01-02", config.ExpirationDetails.Date)
 	} else if config.ExpirationDetails.DateFlawFound == true {
-		refDate, err = time.Parse("2006-01-02 15:04:05 MST", flaw.Date_first_occurrence)
+		refDate, err = time.Parse("2006-01-02 15:04:05 MST", flaw.DateFirstOccurrence)
 		if err != nil {
 			log.Fatal(err)
 		}
