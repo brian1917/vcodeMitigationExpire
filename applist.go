@@ -2,16 +2,17 @@ package main
 
 import (
 	"bufio"
-	"github.com/brian1917/vcodeapi"
 	"log"
 	"os"
+
+	"github.com/brian1917/vcodeapi"
 )
 
-func getApps(user, password string, limit bool, txtfile string) []string {
+func getApps(credsFile string, limit bool, txtfile string) []string {
 	var apps []string
 
 	if limit == false {
-		appList, err := vcodeapi.ParseAppList(user, password)
+		appList, err := vcodeapi.ParseAppList(credsFile)
 		if err != nil {
 			log.Fatal(err)
 		}

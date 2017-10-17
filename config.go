@@ -9,8 +9,7 @@ import (
 
 type config struct {
 	Auth struct {
-		User     string `json:"user"`
-		Password string `json:"password"`
+		CredsFile string `json:"credsFile"`
 	} `json:"auth"`
 
 	TargetMitigations struct {
@@ -78,13 +77,13 @@ func parseConfig() config {
 	// VALIDATE EXPIRATION CONFIG
 	counter := 0
 	if config.ExpirationDetails.DateFlawFound == true {
-		counter += 1
+		counter++
 	}
 	if config.ExpirationDetails.DateOfMitigationApproval == true {
-		counter += 1
+		counter++
 	}
 	if config.ExpirationDetails.SpecificDate == true {
-		counter += 1
+		counter++
 	}
 	if counter == 0 {
 		log.Fatal("One expiration trigger needs to be set to true")

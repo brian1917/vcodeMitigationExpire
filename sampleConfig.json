@@ -1,7 +1,6 @@
 {
   "auth": {
-    "user": "apiUserName",
-    "password": "Pwd123"
+    "credsFile": "/Users/bpitta/.veracode/credentials"
   },
   "targetMitigations": {
     "potentialFalsePositive": false,

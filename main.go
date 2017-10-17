@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/brian1917/vcodeapi"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/brian1917/vcodeapi"
 )
 
 func main() {
@@ -25,6 +26,7 @@ func main() {
 	var recentBuild string
 	var errorCheck error
 	var flawList []string
+	var buildsBack int
 
 	// PARSE CONFIG FILE AND LOG CONFIG SETTINGS
 	config := parseConfig()
@@ -36,7 +38,7 @@ func main() {
 		config.TargetMitigations, config.CommentText, config.AppScope, config.ExpirationDetails)
 
 	// GET APP LIST
-	appList := getApps(config.Auth.User, config.Auth.Password, config.AppScope.LimitAppList, config.AppScope.AppListTextFile)
+	appList := getApps(config.Auth.CredsFile, config.AppScope.LimitAppList, config.AppScope.AppListTextFile)
 	appCounter := 0
 
 	// CYCLE THROUGH EACH APP
@@ -44,12 +46,12 @@ func main() {
 		//ADJUST SOME VARIABLES
 		flawList = []string{}
 		appSkip = false
-		appCounter += 1
+		appCounter++
 
 		fmt.Printf("Processing App ID %v (%v of %v)\n", appID, appCounter, len(appList))
 
 		//GET THE BUILD LIST
-		buildList, err := vcodeapi.ParseBuildList(config.Auth.User, config.Auth.Password, appID)
+		buildList, err := vcodeapi.ParseBuildList(config.Auth.CredsFile, appID)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -61,13 +63,15 @@ func main() {
 			recentBuild = ""
 		} else {
 			//GET THE DETAILED RESULTS FOR MOST RECENT BUILD
-			flaws, _, errorCheck = vcodeapi.ParseDetailedReport(config.Auth.User, config.Auth.Password, buildList[len(buildList)-1].BuildID)
+			flaws, _, errorCheck = vcodeapi.ParseDetailedReport(config.Auth.CredsFile, buildList[len(buildList)-1].BuildID)
 			recentBuild = buildList[len(buildList)-1].BuildID
+			buildsBack = 1
 			//IF THAT BUILD HAS AN ERROR, GET THE NEXT MOST RECENT (CONTINUE FOR 4 TOTAL BUILDS)
 			for i := 1; i < 4; i++ {
 				if len(buildList) > i && errorCheck != nil {
-					flaws, _, errorCheck = vcodeapi.ParseDetailedReport(config.Auth.User, config.Auth.Password, buildList[len(buildList)-(i+1)].BuildID)
+					flaws, _, errorCheck = vcodeapi.ParseDetailedReport(config.Auth.CredsFile, buildList[len(buildList)-(i+1)].BuildID)
 					recentBuild = buildList[len(buildList)-(i+1)].BuildID
+					buildsBack = i + 1
 				}
 			}
 			// IF 4 MOST RECENT BUILDS HAVE ERRORS, THERE ARE NO RESULTS AVAILABLE
@@ -104,10 +108,26 @@ func main() {
 			}
 			// IF WE HAVE FLAWS MEETING CRITERIA, RUN UPDATE MITIGATION API
 			if len(flawList) > 0 {
-				expireError := vcodeapi.ParseUpdateMitigation(config.Auth.User, config.Auth.Password, recentBuild,
+				log.Printf("[*]Trying to mitigate IDs %v in Build ID %v in App ID %v", flawList, recentBuild, appID)
+
+				// TRY TO EXPIRE FLAW
+				expireError := vcodeapi.ParseUpdateMitigation(config.Auth.CredsFile, recentBuild,
 					"rejected", config.ExpirationDetails.RejectionComment, strings.Join(flawList, ","))
+
+				// IF WE HAVE AN ERROR, WE NEED TO TRY 2 BUILDS BACK FROM RESULTS BUILD
+				// EXAMPLE = RESULTS IN BUILD 3 (MANUAL); DYNAMIC IS BUILD 2; STATIC IS BUILD 1 (BUILD WE NEED TO MITIGATE STATIC FLAW)
+				for i := 0; i < 1; i++ {
+					if expireError != nil {
+						expireError = vcodeapi.ParseUpdateMitigation(config.Auth.CredsFile, buildList[len(buildList)-(buildsBack+i)].BuildID,
+							"rejected", config.ExpirationDetails.RejectionComment, strings.Join(flawList, ","))
+						if expireError != nil {
+							log.Printf("[*] %v", expireError)
+						}
+					}
+				}
+				// IF EXPIRE ERROR IS STILL NOT NULL, NOW WE LOG THE ERROR AND EXIT
 				if expireError != nil {
-					log.Fatal(expireError)
+					log.Fatalf("[!] Could not reject Flaw IDs %v in App ID %v", flawList, appID)
 				}
 				log.Printf("App ID %v: Reject Flaw IDs %v\n", appID, strings.Join(flawList, ","))
 			}
