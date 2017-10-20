@@ -21,8 +21,7 @@ A sample config file (`sampleConfig.json`) is included in the repository. An ann
 ```
 {
      "auth": {
-       "user": "apiUserName",
-       "password": "Pwd123"
+       "credsFile": "/Users/name/.veracode/credentials"
      },
      "targetMitigations": {                     // Mitigation types set to true will
        "potentialFalsePositive": false,         // be included for expiring (rejecting)
@@ -58,6 +57,14 @@ A sample config file (`sampleConfig.json`) is included in the repository. An ann
 There might be cases where a single use-case isn't applicable for an organization (e.g.,some apps or
 flaws require different expiration times. In those cases, run multiple instances of the utility with different config files.
 For example, run the utility weekly (or daily) for each config file that is needed for each scenario.
+
+## Credentials File
+Must be structured like the following:
+```
+[DEFAULT]
+veracode_api_key_id = ID HERE
+veracode_api_key_secret = SECRET HERE
+```
 
 ## Executables
 I've added the executables for Mac (vcodeMitigationExpire) and Windows (vcodeMitigationExpire.exe).
