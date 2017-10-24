@@ -12,6 +12,11 @@ type config struct {
 		CredsFile string `json:"credsFile"`
 	} `json:"auth"`
 
+	Mode struct {
+		LogOnly           bool `json:"logOnly"`
+		RejectMitigations bool `json:"rejectMitigations"`
+	} `json:"mode"`
+
 	TargetMitigations struct {
 		PotentialFalsePositive bool `json:"potentialFalsePositive"`
 		MitigatedByDesign      bool `json:"mitigatedByDesign"`
@@ -64,6 +69,21 @@ func parseConfig() config {
 		log.Fatal(err)
 	}
 
+	// VALID AT LEAST ONE MODE IS SET
+	modeCounter := 0
+	if config.Mode.LogOnly == true {
+		modeCounter++
+	}
+	if config.Mode.RejectMitigations == true {
+		modeCounter++
+	}
+	if modeCounter == 0 {
+		log.Fatal("One mode must be set to be set to true")
+	}
+	if modeCounter > 1 {
+		log.Fatal("Only one mode is allowed")
+	}
+
 	// VALIDATE AT LEAST ONE TARGET MITIGATION IS SET
 	if config.TargetMitigations.PotentialFalsePositive == false &&
 		config.TargetMitigations.MitigatedByDesign == false &&
@@ -75,20 +95,20 @@ func parseConfig() config {
 	}
 
 	// VALIDATE EXPIRATION CONFIG
-	counter := 0
+	expTypeCounter := 0
 	if config.ExpirationDetails.DateFlawFound == true {
-		counter++
+		expTypeCounter++
 	}
 	if config.ExpirationDetails.DateOfMitigationApproval == true {
-		counter++
+		expTypeCounter++
 	}
 	if config.ExpirationDetails.SpecificDate == true {
-		counter++
+		expTypeCounter++
 	}
-	if counter == 0 {
+	if expTypeCounter == 0 {
 		log.Fatal("One expiration trigger needs to be set to true")
 	}
-	if counter > 1 {
+	if expTypeCounter > 1 {
 		log.Fatal("Only one expiration trigger is allowed")
 	}
 

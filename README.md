@@ -11,11 +11,6 @@ github.com/brian1917/vcodeapi (https://godoc.org/github.com/brian1917/vcodeapi)
 ## Parameters
 `-config`: path to JSON config file
 
-## Logging
-The first run will create `vcodeMitigationExpire.log` and all subsequent runs will append to that file.
-Logging captures when the utility starts running, config settings (excluding auth), mitigations that were expired, 
-and when the utility stops running.
-
 ## Configuration File
 A sample config file (`sampleConfig.json`) is included in the repository. An annotated version is below:
 ```
@@ -23,6 +18,10 @@ A sample config file (`sampleConfig.json`) is included in the repository. An ann
      "auth": {
        "credsFile": "/Users/name/.veracode/credentials"
      },
+    "mode":{
+      "logOnly": true,                          // True will just log which mitigations would be rejected with current config
+      "rejectMitigations": false                // True will actually reject the mitigations
+  },
      "targetMitigations": {                     // Mitigation types set to true will
        "potentialFalsePositive": false,         // be included for expiring (rejecting)
        "mitigatedByDesign": false,
@@ -50,8 +49,12 @@ A sample config file (`sampleConfig.json`) is included in the repository. An ann
 
    }
  ```
+* At least one and only one `mode` must be set to `true`.
 * At least one `targetMitigation` must be set to `true`
 * One (and only one) of `dateFlawFound`, `dateOfMitigationApproval`, `specificDate` must be set to true.
+
+## Logging
+Each run will create a log file. The file naming convention is `vcodeMitigationExpire_YYYYMMDD_HHMMSS.log` with the time stamp based on the start of execution. Logging captures when the utility starts running, config settings, mitigations that were expired or would be expired depending on mode, and when the utility stops running.
 
 ## Advanced Usage
 There might be cases where a single use-case isn't applicable for an organization (e.g.,some apps or

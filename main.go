@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/brian1917/vcodeapi"
 )
@@ -12,7 +13,7 @@ import (
 func main() {
 
 	// SET UP LOGGING FILE
-	f, err := os.OpenFile("vcodeMitigationExpire.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile("vcodeMitigationExpire_"+time.Now().Format("20060102_150405")+".log", os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,11 +32,12 @@ func main() {
 	// PARSE CONFIG FILE AND LOG CONFIG SETTINGS
 	config := parseConfig()
 	log.Printf("Config Settings:\n"+
+		"[*] Creds File: %v\n"+
 		"[*] Target Mitigations:%v\n"+
 		"[*] Comment Text:%v\n"+
 		"[*] App Scope:%v\n"+
 		"[*] Expiration Details:%v\n",
-		config.TargetMitigations, config.CommentText, config.AppScope, config.ExpirationDetails)
+		config.Auth.CredsFile, config.TargetMitigations, config.CommentText, config.AppScope, config.ExpirationDetails)
 
 	// GET APP LIST
 	appList := getApps(config.Auth.CredsFile, config.AppScope.LimitAppList, config.AppScope.AppListTextFile)
@@ -72,6 +74,7 @@ func main() {
 					flaws, _, errorCheck = vcodeapi.ParseDetailedReport(config.Auth.CredsFile, buildList[len(buildList)-(i+1)].BuildID)
 					recentBuild = buildList[len(buildList)-(i+1)].BuildID
 					buildsBack = i + 1
+					fmt.Println(buildsBack)
 				}
 			}
 			// IF 4 MOST RECENT BUILDS HAVE ERRORS, THERE ARE NO RESULTS AVAILABLE
@@ -110,26 +113,30 @@ func main() {
 			if len(flawList) > 0 {
 				log.Printf("[*]Trying to mitigate IDs %v in Build ID %v in App ID %v", flawList, recentBuild, appID)
 
-				// TRY TO EXPIRE FLAW
-				expireError := vcodeapi.ParseUpdateMitigation(config.Auth.CredsFile, recentBuild,
-					"rejected", config.ExpirationDetails.RejectionComment, strings.Join(flawList, ","))
-
-				// IF WE HAVE AN ERROR, WE NEED TO TRY 2 BUILDS BACK FROM RESULTS BUILD
-				// EXAMPLE = RESULTS IN BUILD 3 (MANUAL); DYNAMIC IS BUILD 2; STATIC IS BUILD 1 (BUILD WE NEED TO MITIGATE STATIC FLAW)
-				for i := 0; i < 1; i++ {
-					if expireError != nil {
-						expireError = vcodeapi.ParseUpdateMitigation(config.Auth.CredsFile, buildList[len(buildList)-(buildsBack+i)].BuildID,
-							"rejected", config.ExpirationDetails.RejectionComment, strings.Join(flawList, ","))
+				if config.Mode.LogOnly == true {
+					log.Printf("App ID: %v: Flaw ID(s) %v meet criteria\n", appID, strings.Join(flawList, ","))
+				} else {
+					// TRY TO EXPIRE FLAW
+					expireError := vcodeapi.ParseUpdateMitigation(config.Auth.CredsFile, recentBuild,
+						"rejected", config.ExpirationDetails.RejectionComment, strings.Join(flawList, ","))
+					// IF WE HAVE AN ERROR, WE NEED TO TRY 2 BUILDS BACK FROM RESULTS BUILD
+					// EXAMPLE = RESULTS IN BUILD 3 (MANUAL); DYNAMIC IS BUILD 2; STATIC IS BUILD 1 (BUILD WE NEED TO MITIGATE STATIC FLAW)
+					for i := 0; i < 1; i++ {
 						if expireError != nil {
-							log.Printf("[*] %v", expireError)
+							expireError = vcodeapi.ParseUpdateMitigation(config.Auth.CredsFile, buildList[len(buildList)-(buildsBack+i)].BuildID,
+								"rejected", config.ExpirationDetails.RejectionComment, strings.Join(flawList, ","))
+							if expireError != nil {
+								log.Printf("[*] %v", expireError)
+							}
 						}
 					}
+					// IF EXPIRE ERROR IS STILL NOT NULL, NOW WE LOG THE ERROR AND EXIT
+					if expireError != nil {
+						log.Fatalf("[!] Could not reject Flaw IDs %v in App ID %v", flawList, appID)
+					}
+					// LOG SUCCESSFUL REJECTED MITIGATIONS
+					log.Printf("App ID %v: Rejected Flaw IDs %v\n", appID, strings.Join(flawList, ","))
 				}
-				// IF EXPIRE ERROR IS STILL NOT NULL, NOW WE LOG THE ERROR AND EXIT
-				if expireError != nil {
-					log.Fatalf("[!] Could not reject Flaw IDs %v in App ID %v", flawList, appID)
-				}
-				log.Printf("App ID %v: Reject Flaw IDs %v\n", appID, strings.Join(flawList, ","))
 			}
 		}
 	}

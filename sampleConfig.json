@@ -2,6 +2,10 @@
   "auth": {
     "credsFile": "/Users/bpitta/.veracode/credentials"
   },
+  "mode":{
+    "logOnly": true,
+    "rejectMitigations": false
+  },
   "targetMitigations": {
     "potentialFalsePositive": false,
     "mitigatedByDesign": false,
