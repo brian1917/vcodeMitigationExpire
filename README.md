@@ -1,4 +1,5 @@
 # Veracode Mitigation Expiring Utility
+[![Go Report Card](https://goreportcard.com/badge/github.com/brian1917/vcodeMitigationExpire)](https://goreportcard.com/report/github.com/brian1917/vcodeMitigationExpire)
 
 ## Description
 Utility designed to be run on a regular cadence (e.g., weekly cron job) to expire mitigations. 
